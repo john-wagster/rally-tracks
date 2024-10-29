@@ -1,68 +1,42 @@
 {
-  "name": "delete-index-1",
-  "operation-type": "delete-index",
-  "index": "openai-wags-fixme"
+  "name": "index-and-search",
+  "description": "",
+  "default": true,
+  "schedule": [
+    {
+      "operation": {
+        "operation-type": "delete-index-1"
+      }
+    }
+    {%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]))%}
+    {%- for i in range(p_data_size|length) %},
+    {
+      "operation": "delete-index-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "create-index-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "check-cluster-health-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "index-docs-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "knn-search-10-100-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "force-merge-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "refresh-after-force-merge-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "wait-until-merges-finish-{{p_data_size[i]}}"
+    },
+    {
+      "operation": "knn-search-10-100-after-merge-{{p_data_size[i]}}"
+    }
+    {%- endfor %}
+  ]
 }
-{%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]))%}
-{%- for i in range(p_data_size|length) %},
-{
-  "name": "delete-index-{{p_data_size[i]}}",
-  "operation-type": "delete-index",
-  "index": "openai-wags-fixme"
-},
-{
-  "name": "create-index-{{p_data_size[i]}}",
-  "operation-type": "create-index",
-  "index": "openai-wags-fixme",
-  "settings": {{index_settings | default({}) | tojson}}
-},
-{
-  "name": "check-cluster-health-{{p_data_size[i]}}",
-  "operation-type": "cluster-health",
-  "request-params": {
-    "wait_for_status": "green"
-  },
-  "retry-until-success": true
-},
-{
-  "name": "index-docs-{{p_data_size[i]}}",
-  "operation-type": "bulk",
-  "corpora": "openai-initial-indexing",
-  "bulk-size": {{initial_indexing_bulk_size | default(500)}},
-  "ingest-percentage": {{initial_indexing_ingest_percentage | default(0.1)}}
-},
-{
-  "name": "knn-search-10-100-{{p_data_size[i]}}",
-  "operation-type": "search",
-  "param-source": "knn-param-source",
-  "k": 10,
-  "num-candidates": 100
-},
-{
-  "name": "force-merge-{{p_data_size[i]}}",
-  "operation-type": "force-merge",
-  "request-timeout": 7200
-},
-{
-  "name": "refresh-after-force-merge-{{p_data_size[i]}}",
-  "operation-type": "refresh",
-  "request-timeout": 1000,
-  "include-in-reporting": true
-},
-{
-  "name": "wait-until-merges-finish-{{p_data_size[i]}}",
-  "operation-type": "index-stats",
-  "index": "_all",
-  "condition": {
-    "path": "_all.total.merges.current",
-    "expected-value": 0
-  }
-},
-{
-  "name": "knn-search-10-100-after-merge-{{p_data_size[i]}}",
-  "operation-type": "search",
-  "param-source": "knn-param-source",
-  "k": 10,
-  "num-candidates": 100
-}
-{%- endfor %}
