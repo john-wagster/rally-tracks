@@ -18,11 +18,17 @@
         "dims" : 96,
         "index" : true,
         "similarity": "dot_product",
+        {%- if "flat" in vector_index_type -%}
+        "index_options": {
+          "type": {{ vector_index_type | tojson }}
+        }
+        {%- else -%}
         "index_options": {
           "type": {{ vector_index_type | default("int8_hnsw") | tojson }},
           "m": 32,
           "ef_construction": 100
         }
+        {%- endif -%}
       }
     }
   }
