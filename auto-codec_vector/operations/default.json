@@ -1,4 +1,4 @@
-{%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]))%}
+{%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, 2580961]))%}
 {%- for i in range(p_data_size|length) %}
 {%- if i != 0 -%},{%- endif -%}
 {
@@ -25,7 +25,7 @@
   "operation-type": "bulk",
   "corpora": "openai-initial-indexing",
   "bulk-size": {{initial_indexing_bulk_size | default(500)}},
-  "ingest-percentage": {{initial_indexing_ingest_percentage | default(0.1)}}
+  "ingest-percentage": {{ p_data_size[i] / 2580961.0 }}
 },
 {
   "name": "knn-search-10-100-{{p_data_size[i]}}",
