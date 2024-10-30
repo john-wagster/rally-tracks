@@ -1,19 +1,15 @@
-{
-  "name": "delete-index-1",
-  "operation-type": "delete-index",
-  "index": "openai-wags-fixme"
-}
 {%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]))%}
-{%- for i in range(p_data_size|length) %},
+{%- for i in range(p_data_size|length) %}
+{%- if i != 0 -%},{%- endif -%}
 {
   "name": "delete-index-{{p_data_size[i]}}",
   "operation-type": "delete-index",
-  "index": "openai-wags-fixme"
+  "index": "vectors"
 },
 {
   "name": "create-index-{{p_data_size[i]}}",
   "operation-type": "create-index",
-  "index": "openai-wags-fixme",
+  "index": "vectors",
   "settings": {{index_settings | default({}) | tojson}}
 },
 {

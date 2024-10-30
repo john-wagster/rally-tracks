@@ -3,13 +3,9 @@
   "description": "",
   "default": true,
   "schedule": [
-    {
-      "operation": {
-        "operation-type": "delete-index-1"
-      }
-    }
     {%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000]))%}
-    {%- for i in range(p_data_size|length) %},
+    {%- for i in range(p_data_size|length) %}
+    {%- if i != 0 -%},{%- endif -%}
     {
       "operation": "delete-index-{{p_data_size[i]}}"
     },

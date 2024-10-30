@@ -1,0 +1,39 @@
+{
+  "settings": {
+    "index": {
+      {# non-serverless-index-settings-marker-start #}{%- if build_flavor != "serverless" or serverless_operator == true -%}
+      {% if preload_pagecache %}
+      "index.store.preload": [ "vec", "vex", "vem"],
+      {% endif %}
+      "number_of_shards": {{number_of_shards | default(1)}},
+      "number_of_replicas": {{number_of_replicas | default(0)}}
+      {%- endif -%}{# non-serverless-index-settings-marker-end #}
+    }
+  },
+  "mappings": {
+    "dynamic": false,
+    "_source": {
+      "enabled": false
+    },
+    "properties": {
+      "emb": {
+        "type": "dense_vector",
+        "element_type": "float",
+        "dims": 1536,
+        "index": true,
+        "similarity": "dot_product",
+        {%- if "flat" in vector_index_type -%}
+        "index_options": {
+          "type": {{ vector_index_type | tojson }}
+        }
+        {%- else -%}
+        "index_options": {
+          "type": {{ vector_index_type | default("int8_hnsw") | tojson }},
+          "m": 32,
+          "ef_construction": 100
+        }
+        {%- endif -%}
+      }
+    }
+  }
+}
