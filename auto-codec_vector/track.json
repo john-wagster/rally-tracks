@@ -11,7 +11,7 @@
   ],
   "corpora": [
     {
-      "name": "openai-initial-indexing",
+      "name": "openai-data",
       "base-url": "https://rally-tracks.elastic.co/openai_vector",
       "documents": [
         {
