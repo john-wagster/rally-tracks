@@ -1,6 +1,6 @@
 {%- set p_k = (k | default(100)) -%}
 {%- set p_candidates = (candidates | default(1000)) -%}
-{%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000])) -%}
+{%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, 2580961])) -%}
 {
   "name": "index-and-search",
   "description": "",
