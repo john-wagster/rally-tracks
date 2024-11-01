@@ -25,7 +25,7 @@
         {%- else -%}
         "index_options": {
           "type": {{ vector_index_type | default("int8_hnsw") | tojson }},
-          "m": 32,
+          "m": 16,
           "ef_construction": 100
         }
         {%- endif -%}

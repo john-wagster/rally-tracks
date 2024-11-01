@@ -27,7 +27,7 @@
   "operation-type": "bulk",
   "corpora": "openai-data",
   "bulk-size": {{initial_indexing_bulk_size | default(500)}},
-  "ingest-percentage": {{ p_data_size[i] / 2580961.0 }}
+  "ingest-percentage": {{ (p_data_size[i] / 2580961.0) * 100 }}
 },
 {
   "name": "knn-search-{{p_k}}-{{p_candidates}}-{{p_data_size[i]}}",
