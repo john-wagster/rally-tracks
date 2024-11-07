@@ -11,7 +11,7 @@
   ],
   "corpora": [
     {
-      "name": "openai-data",
+      "name": "openai",
       "base-url": "https://rally-tracks.elastic.co/openai_vector",
       "documents": [
         {
@@ -19,6 +19,18 @@
           "document-count": 2580961,
           "compressed-bytes": 32076749416,
           "uncompressed-bytes": 90263571686
+        }
+      ]
+    },
+    {
+      "name": "deep1b",
+      "base-url": "https://rally-tracks.elastic.co/dense_vector",
+      "documents": [
+        {
+          "source-file": "documents.json.bz2",
+          "document-count": 10000000,
+          "compressed-bytes": 7689453829,
+          "uncompressed-bytes": 20905226599
         }
       ]
     }

@@ -2,7 +2,8 @@ import bz2
 import json
 import os
 
-QUERIES_FILENAME: str = "queries.json.bz2"
+OPENAI_QUERIES_FILENAME: str = "openai_queries.json.bz2"
+DEEP1B_QUERIES_FILENAME: str = "deep1b_queries.json"
 
 
 class KnnParamSource:
@@ -19,10 +20,17 @@ class KnnParamSource:
         self._params = params
         self._queries = []
 
+        raw_queries_file = self._params.get("queries_file", OPENAI_QUERIES_FILENAME)
+
         cwd = os.path.dirname(__file__)
-        with bz2.open(os.path.join(cwd, QUERIES_FILENAME), "r") as queries_file:
-            for vector_query in queries_file:
-                self._queries.append(json.loads(vector_query))
+        if raw_queries_file.endswith("bz2"):
+            handle = bz2.open(os.path.join(cwd, raw_queries_file), "r")
+        else:
+            handle = open(os.path.join(cwd, raw_queries_file), "r")
+
+        with handle as queries_file:
+            self._queries = [json.loads(query) for query in queries_file]
+
         self._iters = 0
         self._maxIters = len(self._queries)
         self.infinite = True

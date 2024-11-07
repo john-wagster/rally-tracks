@@ -35,8 +35,7 @@
     },
     {
       "operation": "wait-until-merges-finish-{{p_data_size[i]}}",
-      "retry-until-success": true,
-      "include-in-reporting": false
+      "retry-until-success": true
     },
     {
       "operation": "knn-search-{{p_k}}-{{p_candidates}}-after-merge-{{p_data_size[i]}}",

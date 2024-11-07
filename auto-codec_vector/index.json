@@ -19,7 +19,7 @@
       "emb": {
         "type": "dense_vector",
         "element_type": "float",
-        "dims": 1536,
+        "dims": {%- if corpora == "deep1b" -%} 96 {%- elif corpora == "openai" -%} 1536 {%- else -%} 1536 {%- endif -%},
         "index": true,
         "similarity": "dot_product",
         {%- if "flat" in vector_index_type -%}

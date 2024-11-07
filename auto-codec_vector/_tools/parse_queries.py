@@ -8,7 +8,7 @@ import pyarrow as pa
 
 BATCH_SIZE: int = 1000
 QUERY_COLUMN: str = "embedding"
-OUTPUT_FILENAME: str = "queries.json.bz2"
+OUTPUT_FILENAME: str = "openai_queries.json.bz2"
 
 
 def output_queries(input_filename: str, queries_file: typing.TextIO):
