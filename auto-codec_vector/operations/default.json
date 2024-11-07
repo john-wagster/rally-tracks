@@ -1,6 +1,15 @@
 {%- set p_data_size = (data_size | default([10, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, 2580961])) -%}
 {%- set p_k = (k | default(100)) -%}
 {%- set p_candidates = (candidates | default(1000)) -%}
+
+{%- if corpora == "deep1b" -%}
+  {%- set max_data_size = 10000000.0 -%}
+{%- elif corpora == "openai" -%}
+  {%- set max_data_size = 2580961.0 -%}
+{%- else -%}
+  {%- set max_data_size = 0.0 -%}
+{%- endif -%}
+
 {%- for i in range(p_data_size|length) -%}
 {%- if i != 0 -%},{%- endif -%}
 {
@@ -27,7 +36,7 @@
   "operation-type": "bulk",
   "corpora": "{{ corpora | default('openai') }}",
   "bulk-size": {{initial_indexing_bulk_size | default(500)}},
-  "ingest-percentage": {{ (p_data_size[i] / 2580961.0) * 100 }}
+  "ingest-percentage": {{ (p_data_size[i] / max_data_size) * 100 }}
 },
 {
   "name": "knn-search-{{p_k}}-{{p_candidates}}-{{p_data_size[i]}}",
