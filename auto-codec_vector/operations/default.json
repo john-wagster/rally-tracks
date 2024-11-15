@@ -6,6 +6,8 @@
   {%- set max_data_size = 10000000.0 -%}
 {%- elif corpora == "openai" -%}
   {%- set max_data_size = 2580961.0 -%}
+{%- elif corpora == "so" -%}
+  {%- set max_data_size = 2000000.0 -%}
 {%- else -%}
   {%- set max_data_size = 0.0 -%}
 {%- endif -%}
@@ -42,9 +44,10 @@
   "name": "knn-search-{{p_k}}-{{p_candidates}}-{{p_data_size[i]}}",
   "operation-type": "search",
   "param-source": "knn-param-source",
-  "queries_file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
+  "queries_file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
   "k": {{ p_k | default(10) }},
-  "num-candidates": {{ p_candidates | default(100) }}
+  "num-candidates": {{ p_candidates | default(100) }},
+  "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- else -%} "emb" {%- endif -%}
 },
 {
   "name": "force-merge-{{p_data_size[i]}}",
@@ -72,8 +75,9 @@
   "name": "knn-search-{{p_k}}-{{p_candidates}}-after-merge-{{p_data_size[i]}}",
   "operation-type": "search",
   "param-source": "knn-param-source",
-  "queries_file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
+  "queries_file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
   "k": {{ p_k | default(10) }},
-  "num-candidates": {{ p_candidates | default(100) }}
+  "num-candidates": {{ p_candidates | default(100) }},
+  "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- else -%} "emb" {%- endif -%}
 }
 {%- endfor -%}

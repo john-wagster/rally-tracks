@@ -1,3 +1,5 @@
+FIXME: rewrite this README to say that this track is based on three other ones: openai, dense_vector, so_vector
+
 ## OpenAI vector track
 
 This track benchmarks the [NQ dataset](https://huggingface.co/datasets/BeIR/nq) enriched with embeddings generated using OpenAI's [`text-embedding-ada-002` model](https://openai.com/blog/new-and-improved-embedding-model).

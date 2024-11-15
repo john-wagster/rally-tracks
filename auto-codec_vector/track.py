@@ -4,6 +4,7 @@ import os
 
 OPENAI_QUERIES_FILENAME: str = "openai_queries.json.bz2"
 DEEP1B_QUERIES_FILENAME: str = "deep1b_queries.json"
+SO_QUERIES_FILENAME: str = "so_queries.json"
 
 
 class KnnParamSource:
@@ -43,7 +44,7 @@ class KnnParamSource:
 
         result["body"] = {
             "knn": {
-                "field": "emb",
+                "field": self._params.get("field-name", "emb"),
                 "query_vector": self._queries[self._iters],
                 "k": self._params.get("k", 10),
                 "num_candidates": self._params.get("num-candidates", 50),

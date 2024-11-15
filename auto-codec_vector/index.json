@@ -16,10 +16,10 @@
       "enabled": false
     },
     "properties": {
-      "emb": {
+      {%- if corpora == "deep1b" -%} "vector": { {%- elif corpora == "openai" -%} "emb": { {%- elif corpora == "so" -%} "titleVector": { {%- else -%} "emb": { {%- endif -%}
         "type": "dense_vector",
         "element_type": "float",
-        "dims": {%- if corpora == "deep1b" -%} 96 {%- elif corpora == "openai" -%} 1536 {%- else -%} 1536 {%- endif -%},
+        "dims": {%- if corpora == "deep1b" -%} 96 {%- elif corpora == "openai" -%} 1536 {%- elif corpora == "so" -%} 768 {%- else -%} 1536 {%- endif -%},
         "index": true,
         "similarity": "dot_product",
         {%- if "flat" in vector_index_type -%}
@@ -29,7 +29,7 @@
         {%- else -%}
         "index_options": {
           "type": {{ vector_index_type | default("int8_hnsw") | tojson }},
-          "m": 32,
+          "m": 16,
           "ef_construction": 100
         }
         {%- endif -%}
