@@ -8,6 +8,8 @@
   {%- set max_data_size = 2580961.0 -%}
 {%- elif corpora == "so" -%}
   {%- set max_data_size = 2000000.0 -%}
+{%- elif corpora == "e5small" -%}
+  {%- set max_data_size = 10477043.0 -%}
 {%- else -%}
   {%- set max_data_size = 0.0 -%}
 {%- endif -%}

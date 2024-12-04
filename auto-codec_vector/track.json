@@ -45,6 +45,18 @@
           "uncompressed-bytes": 34615467266
         }
       ]
+    },
+    {
+      "name": "e5small",
+      "base-url": "file:///Users/jwagster/workspace/rally-tracks/auto-codec_vector",
+      "documents": [
+        {
+          "source-file": "corpus-E5-small.json",
+          "document-count": 10477043,
+          "compressed-bytes": 1,
+          "uncompressed-bytes": 88117830671
+        }
+      ]
     }
   ],
   "operations": [
