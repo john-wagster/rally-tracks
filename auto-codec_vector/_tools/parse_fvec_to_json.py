@@ -9,15 +9,18 @@ import sys
 import struct
 
 dims = 384
+max = 150  # None for all
 
-def read_fvecs(files):
+def read_fvecs(files, max=None):
     for f in files:
         print(f"Reading from {f}.")
         with open(f, 'rb') as handle:
             check_dims = struct.unpack('<i', handle.read(4))[0]
             print(f"dims check: {check_dims}")
             exit_while = True
-            while(exit_while):
+            count = 0
+            while(exit_while and count < max):
+                count+=1
                 vector = []
                 for i in range(0, dims):
                     bytes = handle.read(4)
@@ -36,6 +39,6 @@ if __name__ == "__main__":
     input_files = sys.argv[1:-1]
     output_file = sys.argv[-1]
     print(f"Starting conversion to rally json for: {input_files} to {output_file}")
-    vectors_promise = read_fvecs(input_files)
+    vectors_promise = read_fvecs(input_files, max)
     write_json(output_file, vectors_promise)
     print("Conversion complete")
