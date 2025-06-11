@@ -126,7 +126,7 @@
           "clients": {{ search_clients | default(1) | int }},
           "iterations": 100
         }
-        {% if index_mode | default('time_series') is equalto 'time_series' and skip_running_tsdb_aggs is not defined %}
+        {% if p_index_mode == "time_series" and skip_running_tsdb_aggs is not defined %}
         ,{
           "operation": "date-histo-memory-usage-hour",
           "warmup-iterations": 50,
@@ -147,6 +147,56 @@
         },
         {
           "operation": "terms-container-image-memory-usage",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        }
+        {% endif %}
+        {% if p_index_mode == "time_series" and run_esql_aggs is defined %}
+        ,{
+          "operation": "esql-memory-usage-hour",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-usage-day",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-usage-by-container-hour",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-usage-by-container-day",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-pagefault-rate-hour",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-pagefault-rate-day",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-pagefault-rate-by-container-hour",
+          "warmup-iterations": 50,
+          "clients": {{ search_clients | default(1) | int }},
+          "iterations": 100
+        },
+        {
+          "operation": "esql-memory-pagefault-rate-by-container-day",
           "warmup-iterations": 50,
           "clients": {{ search_clients | default(1) | int }},
           "iterations": 100
@@ -351,6 +401,7 @@
         {
           "operation": {
             "operation-type": "force-merge",
+            "mode" : "polling",
             "request-timeout": 7200{%- if force_merge_max_num_segments is defined %},
             "max-num-segments": {{ force_merge_max_num_segments | tojson }}
             {%- endif %}
@@ -382,7 +433,7 @@
           }
         }
         {%- endif -%}{# serverless-post-ingest-sleep-marker-end #}
-        {% if index_mode | default('time_series') is equalto 'standard' %}
+        {% if p_index_mode != "time_series" and p_index_mode != "logsdb" %}
         ,{
           "operation": "search_by_doc_id",
           "warmup-iterations": 50,

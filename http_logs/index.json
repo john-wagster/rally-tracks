@@ -13,6 +13,9 @@
     "index.sort.field": ["@timestamp"],
     "index.sort.order":["desc"]
     {%- endif %}
+    {% if source_mode %}
+    ,"mapping.source.mode": {{ source_mode | tojson }}
+    {% endif %}
   },
   "mappings": {
     "dynamic": "strict",
