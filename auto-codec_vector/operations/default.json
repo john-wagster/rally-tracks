@@ -46,10 +46,10 @@
   "name": "knn-search-{{p_k}}-{{p_candidates}}-{{p_data_size[i]}}",
   "operation-type": "search",
   "param-source": "knn-param-source",
-  "queries_file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- elif corpora == "e5small" -%} "queries-E5-small.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
+  "queries-file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- elif corpora == "e5small" -%} "queries-E5-small.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
   "k": {{ p_k | default(10) }},
   "num-candidates": {{ p_candidates | default(100) }},
-  "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- else -%} "emb" {%- endif -%}
+  "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- elif corpora == "e5small" -%} "emb" {%- else -%} "emb" {%- endif -%}
 },
 {
   "name": "force-merge-{{p_data_size[i]}}",
@@ -77,9 +77,21 @@
   "name": "knn-search-{{p_k}}-{{p_candidates}}-after-merge-{{p_data_size[i]}}",
   "operation-type": "search",
   "param-source": "knn-param-source",
-  "queries_file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- elif corpora == "e5small" -%} "queries-E5-small.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
+  "queries-file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- elif corpora == "e5small" -%} "queries-E5-small.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
   "k": {{ p_k | default(10) }},
   "num-candidates": {{ p_candidates | default(100) }},
-  "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- else -%} "emb" {%- endif -%}
+  "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- elif corpora == "e5small" -%} "emb" {%- else -%} "emb" {%- endif -%}
+},
+{
+   "name": "recall-{{p_k}}-{{p_candidates}}",
+   "operation-type": "recall",
+   "param-source": "recall-param-source",
+   "k": {{ p_k | default(10) }},
+   "num-candidates": {{ p_candidates | default(100) }},
+   "queries-file": {%- if corpora == "deep1b" -%} "deep1b_queries.json" {%- elif corpora == "openai" -%} "openai_queries.json.bz2" {%- elif corpora == "so" -%} "so_queries.json" {%- elif corpora == "e5small" -%} "queries-E5-small.json" {%- else -%} "openai_queries.json.bz2" {%- endif -%},
+"k": {{ p_k | default(10) }},
+   "qrels_file": null,
+   "field-name": {%- if corpora == "deep1b" -%} "vector" {%- elif corpora == "openai" -%} "emb" {%- elif corpora == "so" -%} "titleVector" {%- elif corpora == "e5small" -%} "emb" {%- else -%} "emb" {%- endif -%}
+   "include-in-reporting": true
 }
 {%- endfor -%}
