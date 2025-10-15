@@ -46,7 +46,7 @@ class KnnParamSource:
 
     def params(self):
         result = {"index": self._index_name, "cache": self._params.get("cache", False), "size": self._params.get("k", 10)}
-        num_candidates = self._params.get("num-candidates", 50)
+        visit_percentage = self._params.get("visit-percentage", 50)
         oversample = self._params.get("oversample", -1)
         query_vec = self._queries[self._iters]
         knn_query = {
@@ -54,7 +54,7 @@ class KnnParamSource:
                 "field": "emb",
                 "query_vector": query_vec,
                 "k": result["size"],
-                "num_candidates": num_candidates,
+                "visit_percentage": visit_percentage,
             }
         }
         if "filter" in self._params:
@@ -112,7 +112,7 @@ class KnnRecallParamSource:
             "index": self._index_name,
             "cache": self._params.get("cache", False),
             "size": self._params.get("k", 10),
-            "num_candidates": self._params.get("num-candidates", 50),
+            "visit_percentage": self._params.get("visit-percentage", 50),
             "oversample": self._params.get("oversample", -1),
             "knn_vector_store": KnnVectorStore(),
         }
@@ -121,13 +121,13 @@ class KnnRecallParamSource:
 # Used in tandem with the KnnRecallParamSource.
 # reads the queries, executes knn search and compares the results with the true nearest neighbors
 class KnnRecallRunner:
-    def get_knn_query(self, query_vec, k, num_candidates, oversample):
+    def get_knn_query(self, query_vec, k, visit_percentage, oversample):
         knn_query = {
             "knn": {
                 "field": "emb",
                 "query_vector": query_vec,
                 "k": k,
-                "num_candidates": num_candidates,
+                "visit_percentage": visit_percentage,
             }
         }
         if oversample >= 0:
@@ -136,7 +136,7 @@ class KnnRecallRunner:
 
     async def __call__(self, es, params):
         k = params["size"]
-        num_candidates = params["num_candidates"]
+        visit_percentage = params["visit_percentage"]
         index = params["index"]
         request_cache = params["cache"]
         recall_total = 0
@@ -146,7 +146,7 @@ class KnnRecallRunner:
 
         knn_vector_store: KnnVectorStore = params["knn_vector_store"]
         for query_id, query_vector in enumerate(knn_vector_store.get_query_vectors()):
-            knn_body = self.get_knn_query(query_vector, k, num_candidates, params["oversample"])
+            knn_body = self.get_knn_query(query_vector, k, visit_percentage, params["oversample"])
             knn_body["docvalue_fields"] = ["docid"]
             knn_result = await es.search(
                 body=knn_body,
@@ -166,7 +166,7 @@ class KnnRecallRunner:
             "min_recall": min_recall,
             "max_recall": max_recall,
             "k": k,
-            "num_candidates": num_candidates,
+            "visit_percentage": visit_percentage,
             "oversample": params["oversample"],
         }
         logger.info(f"Recall results: {to_return}")
